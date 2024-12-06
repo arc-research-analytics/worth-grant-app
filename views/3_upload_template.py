@@ -54,7 +54,7 @@ st.markdown(f'''
 # instructional text
 st.markdown(f'''
     <p style="font-size: 23px; font-weight: 200; text-align: left;">
-        Once you have copied your data to the template downloaded from Page 2, upload it below. Note that your uploaded data must contain all the fields originally included from the template you downloaded (and no new columns can be included). This app will anonymize your data and provide a unique ID field for each row of data.
+        Once you have copied your data to the template downloaded from Page 2, upload it below. <i>Note that your uploaded data must contain all the fields originally included from the template you downloaded (and no new columns can be included)</i>. This app will anonymize your data and provide a unique ID field for each row of data.
     </p>
 ''', unsafe_allow_html=True)
 
