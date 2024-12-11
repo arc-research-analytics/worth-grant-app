@@ -75,7 +75,6 @@ columns_to_keep = {
     "Race": 10,
     "Ethnicity": 10,
     "Gender": 10,
-    "Age": 10,
     "HH Income": 15
 }
 

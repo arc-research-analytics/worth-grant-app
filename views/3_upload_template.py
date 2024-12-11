@@ -93,7 +93,7 @@ def scrub_data(df, original_filename):
                 reference_date).dt.days).astype(str).apply(lambda x: x[::2])
 
     name_format = df['Name'].astype(str).str.replace(
-        ' ', '', regex=True).str.lower().apply(lambda x: x[::3]).str[:4].str.ljust(4, 'x')
+        ' ', '', regex=True).str.lower().apply(lambda x: x[1:][::3]).str[:4].str.ljust(4, 'x')
 
     df['Unique ID'] = name_format.astype(str) + "-" + days_old.astype(str)
 
@@ -132,7 +132,6 @@ def scrub_data(df, original_filename):
         "Race",
         "Ethnicity",
         "Gender",
-        "Age",
         "HH Income"
     ]]
     send_df = send_df[[
@@ -144,7 +143,6 @@ def scrub_data(df, original_filename):
         "Race",
         "Ethnicity",
         "Gender",
-        "Age",
         "HH Income"
     ]]
 
@@ -182,7 +180,6 @@ def main():
         "Race",
         "Ethnicity",
         "Gender",
-        "Age",
         "HH Income"
     ]
 
