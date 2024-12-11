@@ -11,6 +11,9 @@ st.set_page_config(
 # custom CSS
 hide_default_format = """
     <style>
+        [data-testid="stMainBlockContainer"] {
+            padding-top: 100px;
+        }
         [data-testid="stBaseButton-secondary"] {
             background-color: #FFFFF6;
         }
@@ -23,9 +26,6 @@ hide_default_format = """
 
 # inject the CSS
 st.markdown(hide_default_format, unsafe_allow_html=True)
-
-# top of page spacing
-st.write("")
 
 # title text
 st.markdown(f'''
@@ -66,6 +66,8 @@ st.write("")
 columns_to_keep = {
     "Service": 20,
     "Service Date": 15,
+    "Name": 20,
+    "Date of Birth": 15,
     "Street Address": 35,
     "Unit (if applicable)": 20,
     "County": 20,

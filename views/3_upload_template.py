@@ -62,37 +62,47 @@ st.markdown(f'''
 # Function to scrub data
 def scrub_data(df, original_filename):
 
-    # Extract final 4 digits from 'Service Date'
-    service_date_digits = df['Service Date'].astype(str).str[-4:]
+    # # Extract final 4 digits from 'Service Date'
+    # service_date_digits = df['Service Date'].astype(str).str[-4:]
 
-    # Concatenate 'Street Address' and 'Unit (if applicable)'
-    # - Replace NaN or empty 'Unit (if applicable)' values with 'Na'
-    combined_address = (
-        df['Street Address'].astype(str) +
-        df['Unit (if applicable)'].fillna('Na').replace('', 'Na')
-    )
+    # # Concatenate 'Street Address' and 'Unit (if applicable)'
+    # # - Replace NaN or empty 'Unit (if applicable)' values with 'Na'
+    # combined_address = (
+    #     df['Street Address'].astype(str) +
+    #     df['Unit (if applicable)'].fillna('Na').replace('', 'Na')
+    # )
 
-    # Process the combined address:
-    # - Remove spaces
-    # - Convert to lowercase
-    # - Limit to the first 20 characters and take every 3rd character
-    processed_combined_address = (
-        combined_address
-        .str.replace(' ', '', regex=True)
-        .str.lower()
-        .str[:20]
-        .apply(lambda x: x[::3])
-    )
+    # # Process the combined address:
+    # # - Remove spaces
+    # # - Convert to lowercase
+    # # - Limit to the first 20 characters and take every 3rd character
+    # processed_combined_address = (
+    #     combined_address
+    #     .str.replace(' ', '', regex=True)
+    #     .str.lower()
+    #     .str[:20]
+    #     .apply(lambda x: x[::3])
+    # )
 
-    # Create 'Unique ID'
-    df['Unique ID'] = processed_combined_address + service_date_digits
+    # # Create 'Unique ID'
+    # df['Unique ID'] = processed_combined_address + service_date_digits
+
+    df['Date of Birth'] = pd.to_datetime(df['Date of Birth'])
+    reference_date = pd.Timestamp('1920-01-01')
+    days_old = ((df['Date of Birth'] -
+                reference_date).dt.days).astype(str).apply(lambda x: x[::2])
+
+    name_format = df['Name'].astype(str).str.replace(
+        ' ', '', regex=True).str.lower().apply(lambda x: x[::3]).str[:4].str.ljust(4, 'x')
+
+    df['Unique ID'] = name_format.astype(str) + "-" + days_old.astype(str)
 
     # Zero-pad all values in 'Unique ID' to the same length as the max value
     max_length = df['Unique ID'].str.len().max()
     df['Unique ID'] = df['Unique ID'].apply(lambda x: x.ljust(max_length, '0'))
 
-    # Truncate 'Service' and 'Unique ID' columns based on the number of non-null 'Street Address' values
-    valid_count = df['Street Address'].notna().sum()
+    # Calculate number of non-null 'Name' values
+    valid_count = df['Name'].notna().sum()
 
     # Truncate the 'Service' and 'Unique ID' columns
     df.loc[valid_count:, ['Service', 'Unique ID']] = None
@@ -100,16 +110,21 @@ def scrub_data(df, original_filename):
     # Properly format the dates
     df['Service Date'] = pd.to_datetime(
         df['Service Date']).dt.strftime('%m/%d/%Y')
+    df['Date of Birth'] = pd.to_datetime(
+        df['Date of Birth']).dt.strftime('%m/%d/%Y')
 
     # Create two versions of the DataFrame
     keep_df = df.copy()
-    send_df = df.drop(columns=['Street Address', 'Unit (if applicable)'])
+    send_df = df.drop(columns=['Name', 'Date of Birth',
+                      'Street Address', 'Unit (if applicable)'])
 
     # rearrage columns
     keep_df = keep_df[[
         "Service",
         "Service Date",
         "Unique ID",
+        "Name",
+        "Date of Birth",
         "Street Address",
         "Unit (if applicable)",
         "County",
@@ -158,6 +173,8 @@ def main():
     expected_columns = [
         "Service",
         "Service Date",
+        "Name",
+        "Date of Birth",
         "Street Address",
         "Unit (if applicable)",
         "County",

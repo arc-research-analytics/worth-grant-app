@@ -22,12 +22,12 @@ st.markdown(f'''
     </p>
 ''', unsafe_allow_html=True)
 
+# custom CSS
 hide_default_format = """
     <style>
         [data-testid="stMainBlockContainer"] {
-            padding-top: 60px;
+            padding-top: 100px;
         }
-
     </style>
 """
 
