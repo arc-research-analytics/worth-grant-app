@@ -88,7 +88,7 @@ def scrub_data(df, original_filename):
     # df['Unique ID'] = processed_combined_address + service_date_digits
 
     df['Date of Birth'] = pd.to_datetime(df['Date of Birth'])
-    reference_date = pd.Timestamp('1920-01-01')
+    reference_date = pd.Timestamp('1920-01-02')
     days_old = ((df['Date of Birth'] -
                 reference_date).dt.days).astype(str).apply(lambda x: x[::2])
 
