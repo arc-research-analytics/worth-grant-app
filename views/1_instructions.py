@@ -24,7 +24,7 @@ st.markdown(f'''
 
 hide_default_format = """
     <style>
-        [data-testid="stAppViewBlockContainer"] {
+        [data-testid="stMainBlockContainer"] {
             padding-top: 60px;
         }
 
