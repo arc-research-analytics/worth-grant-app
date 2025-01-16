@@ -63,8 +63,10 @@ st.write("")
 st.write("")
 st.write("")
 
+# define the columns in the spreadsheet
 columns_to_keep = {
     "Service": 20,
+    "Submitting Organization": 25,
     "Service Date": 15,
     "Name": 20,
     "Date of Birth": 15,

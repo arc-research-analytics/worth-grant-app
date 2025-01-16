@@ -62,31 +62,6 @@ st.markdown(f'''
 # Function to scrub data
 def scrub_data(df, original_filename):
 
-    # # Extract final 4 digits from 'Service Date'
-    # service_date_digits = df['Service Date'].astype(str).str[-4:]
-
-    # # Concatenate 'Street Address' and 'Unit (if applicable)'
-    # # - Replace NaN or empty 'Unit (if applicable)' values with 'Na'
-    # combined_address = (
-    #     df['Street Address'].astype(str) +
-    #     df['Unit (if applicable)'].fillna('Na').replace('', 'Na')
-    # )
-
-    # # Process the combined address:
-    # # - Remove spaces
-    # # - Convert to lowercase
-    # # - Limit to the first 20 characters and take every 3rd character
-    # processed_combined_address = (
-    #     combined_address
-    #     .str.replace(' ', '', regex=True)
-    #     .str.lower()
-    #     .str[:20]
-    #     .apply(lambda x: x[::3])
-    # )
-
-    # # Create 'Unique ID'
-    # df['Unique ID'] = processed_combined_address + service_date_digits
-
     df['Date of Birth'] = pd.to_datetime(df['Date of Birth'])
     reference_date = pd.Timestamp('1920-01-02')
     days_old = ((df['Date of Birth'] -
@@ -121,6 +96,7 @@ def scrub_data(df, original_filename):
     # rearrage columns
     keep_df = keep_df[[
         "Service",
+        "Submitting Organization",
         "Service Date",
         "Unique ID",
         "Name",
@@ -136,6 +112,7 @@ def scrub_data(df, original_filename):
     ]]
     send_df = send_df[[
         "Service",
+        "Submitting Organization",
         "Service Date",
         "Unique ID",
         "County",
@@ -170,6 +147,7 @@ def main():
     # Expected column names
     expected_columns = [
         "Service",
+        "Submitting Organization",
         "Service Date",
         "Name",
         "Date of Birth",
