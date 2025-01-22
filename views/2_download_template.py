@@ -67,7 +67,7 @@ st.write("")
 columns_to_keep = {
     "Service": 20,
     "Submitting Organization": 25,
-    "Service Date": 15,
+    "Service Completion Date": 15,
     "Name": 20,
     "Date of Birth": 15,
     "Street Address": 35,

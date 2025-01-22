@@ -83,8 +83,8 @@ def scrub_data(df, original_filename):
     df.loc[valid_count:, ['Service', 'Unique ID']] = None
 
     # Properly format the dates
-    df['Service Date'] = pd.to_datetime(
-        df['Service Date']).dt.strftime('%m/%d/%Y')
+    df['Service Completion Date'] = pd.to_datetime(
+        df['Service Completion Date']).dt.strftime('%m/%d/%Y')
     df['Date of Birth'] = pd.to_datetime(
         df['Date of Birth']).dt.strftime('%m/%d/%Y')
 
@@ -97,7 +97,7 @@ def scrub_data(df, original_filename):
     keep_df = keep_df[[
         "Service",
         "Submitting Organization",
-        "Service Date",
+        "Service Completion Date",
         "Unique ID",
         "Name",
         "Date of Birth",
@@ -113,7 +113,7 @@ def scrub_data(df, original_filename):
     send_df = send_df[[
         "Service",
         "Submitting Organization",
-        "Service Date",
+        "Service Completion Date",
         "Unique ID",
         "County",
         "ZIP",
@@ -148,7 +148,7 @@ def main():
     expected_columns = [
         "Service",
         "Submitting Organization",
-        "Service Date",
+        "Service Completion Date",
         "Name",
         "Date of Birth",
         "Street Address",
