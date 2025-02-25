@@ -108,7 +108,8 @@ def scrub_data(df, original_filename):
         "Race",
         "Ethnicity",
         "Gender",
-        "HH Income"
+        "HH Income",
+        "HH Size"
     ]]
     send_df = send_df[[
         "Service",
@@ -120,7 +121,8 @@ def scrub_data(df, original_filename):
         "Race",
         "Ethnicity",
         "Gender",
-        "HH Income"
+        "HH Income",
+        "HH Size"
     ]]
 
     # Save both DataFrames to Excel files in memory buffers
@@ -158,7 +160,8 @@ def main():
         "Race",
         "Ethnicity",
         "Gender",
-        "HH Income"
+        "HH Income",
+        "HH Size"
     ]
 
     # File upload widget

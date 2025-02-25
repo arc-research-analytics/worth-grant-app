@@ -77,7 +77,8 @@ columns_to_keep = {
     "Race": 10,
     "Ethnicity": 10,
     "Gender": 10,
-    "HH Income": 15
+    "HH Income": 15,
+    "HH Size": 15
 }
 
 # auto-fill the first N rows
