@@ -107,9 +107,12 @@ def scrub_data(df, original_filename):
         "ZIP",
         "Race",
         "Ethnicity",
+        "Primary Language",
         "Gender",
         "HH Income",
-        "HH Size"
+        "HH Size",
+        "Existing Homeowner (Y/N)",
+        "First-Generation Homeowner (Y/N)"
     ]]
     send_df = send_df[[
         "Service",
@@ -120,9 +123,12 @@ def scrub_data(df, original_filename):
         "ZIP",
         "Race",
         "Ethnicity",
+        "Primary Language",
         "Gender",
         "HH Income",
-        "HH Size"
+        "HH Size",
+        "Existing Homeowner (Y/N)",
+        "First-Generation Homeowner (Y/N)"
     ]]
 
     # Save both DataFrames to Excel files in memory buffers
@@ -159,9 +165,12 @@ def main():
         "ZIP",
         "Race",
         "Ethnicity",
+        "Primary Language",
         "Gender",
         "HH Income",
-        "HH Size"
+        "HH Size",
+        "Existing Homeowner (Y/N)",
+        "First-Generation Homeowner (Y/N)"
     ]
 
     # File upload widget

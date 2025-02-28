@@ -72,13 +72,16 @@ columns_to_keep = {
     "Date of Birth": 15,
     "Street Address": 35,
     "Unit (if applicable)": 20,
-    "County": 20,
+    "County": 15,
     "ZIP": 8,
     "Race": 10,
     "Ethnicity": 10,
+    "Primary Language": 15,
     "Gender": 10,
     "HH Income": 15,
-    "HH Size": 15
+    "HH Size": 15,
+    "Existing Homeowner (Y/N)": 17,
+    "First-Generation Homeowner (Y/N)": 17,
 }
 
 # auto-fill the first N rows
