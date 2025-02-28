@@ -80,8 +80,8 @@ columns_to_keep = {
     "Gender": 10,
     "HH Income": 15,
     "HH Size": 15,
-    "Existing Homeowner (Y/N)": 17,
-    "First-Generation Homeowner (Y/N)": 17,
+    "Existing Homeowner (Y/N)": 22,
+    "First-Generation Homeowner (Y/N)": 28,
 }
 
 # auto-fill the first N rows
