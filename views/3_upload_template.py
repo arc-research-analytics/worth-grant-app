@@ -68,13 +68,13 @@ def scrub_data(df, original_filename):
     try:
         # Convert 'Date of Birth' to datetime with error handling - this is non-critical
         df['Date of Birth'] = pd.to_datetime(df['Date of Birth'], errors='coerce')
-        # Check if any dates couldn't be parsed
-        if df['Date of Birth'].isna().any():
-            invalid_dob_rows = df[df['Date of Birth'].isna()].index.tolist()
-            warnings.append(f"Warning: Invalid date format found in 'Date of Birth' column. While not essential, this field is used to generate a unique ID for each record. This unique ID can still be generatged, but it will not be based on accurate, record-level information for that individual. Proceed with caution!")
+        # # Check if any dates couldn't be parsed
+        # if df['Date of Birth'].isna().any():
+        #     invalid_dob_rows = df[df['Date of Birth'].isna()].index.tolist()
+        #     warnings.append(f"Warning: Invalid date format found in 'Date of Birth' column. While not essential, this field is used to generate a unique ID for each record. This unique ID can still be generatged, but it will not be based on accurate, record-level information for that individual. Proceed with caution!")
             
-            # For missing Date of Birth values, set a default date to allow processing to continue
-            df.loc[df['Date of Birth'].isna(), 'Date of Birth'] = pd.Timestamp('1900-01-01')
+        #     # For missing Date of Birth values, set a default date to allow processing to continue
+        #     df.loc[df['Date of Birth'].isna(), 'Date of Birth'] = pd.Timestamp('1900-01-01')
 
         # clean up the 'Service Completion Date' column
         df['Service Completion Date'] = df['Service Completion Date'].astype(str).str.strip()
