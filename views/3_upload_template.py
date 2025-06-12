@@ -76,12 +76,16 @@ def scrub_data(df, original_filename):
             # For missing Date of Birth values, set a default date to allow processing to continue
             df.loc[df['Date of Birth'].isna(), 'Date of Birth'] = pd.Timestamp('1900-01-01')
 
+        # clean up the 'Service Completion Date' column
+        df['Service Completion Date'] = df['Service Completion Date'].astype(str).str.strip()
+        df['Service Completion Date'] = df['Service Completion Date'].replace(['', ' ', 'nan', 'None', 'N/A'], pd.NaT)
+
         # Convert 'Service Completion Date' to datetime with error handling - this is critical
         df['Service Completion Date'] = pd.to_datetime(df['Service Completion Date'], errors='coerce')
-        if df['Service Completion Date'].isna().any():
-            invalid_scd_rows = df[df['Service Completion Date'].isna()].index.tolist()
-            error_msg = f"Invalid date format found in 'Service Completion Date' column. Please check your data and upload again with this column filled in with proper date formatting."
-            return None, None, None, None, error_msg, warnings
+        # if df['Service Completion Date'].isna().any():
+        #     invalid_scd_rows = df[df['Service Completion Date'].isna()].index.tolist()
+        #     error_msg = f"Invalid date format found in 'Service Completion Date' column. Please check your data and upload again with this column filled in with proper date formatting."
+        #     return None, None, None, None, error_msg, warnings
     
         reference_date = pd.Timestamp('1920-01-02')
         days_old = ((df['Date of Birth'] -
