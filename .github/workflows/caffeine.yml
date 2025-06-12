@@ -24,4 +24,4 @@ jobs:
         with:
           add: "Assets/timestamp.txt"
           message: "Automated commit: Adding timestamp file"
-          push: true # Ensures the commit is pushed to the repo
+          push: true
