@@ -54,7 +54,6 @@ service_rendered = st.selectbox(
         "Home Rehabilitation",
         "Legacy Resident Tax Relief",
         "Heirs Property Resolution",
-        "Foreclosure Prevention",
         "Education",
         "CDFI Activity",
     ],
@@ -68,6 +67,14 @@ columns_to_keep = {
     "Service": 20,
     "Submitting Organization": 25,
     "Service Completion Date": 20,
+}
+
+# Add Counseling Service Rendered column for Housing Counseling template
+if service_rendered == "Housing Counseling":
+    columns_to_keep["Counseling Service Rendered"] = 25
+
+# Continue with remaining columns
+columns_to_keep.update({
     "Name": 20,
     "Date of Birth": 15,
     "Street Address": 35,
@@ -82,7 +89,7 @@ columns_to_keep = {
     "HH Size": 15,
     "Existing Homeowner (Y/N)": 22,
     "First-Generation Homeowner (Y/N)": 28,
-}
+})
 
 # auto-fill the first N rows
 rows_in_spreadsheet = 50
@@ -106,6 +113,14 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
     # Set column widths
     for col_num, (col_name, width) in enumerate(columns_to_keep.items()):
         worksheet.set_column(col_num, col_num, width)
+
+    # Add data validation for Counseling Service Rendered column in Housing Counseling template
+    if service_rendered == "Housing Counseling":
+        counseling_service_col = list(columns_to_keep.keys()).index("Counseling Service Rendered")
+        worksheet.data_validation(1, counseling_service_col, rows_in_spreadsheet, counseling_service_col, {
+            'validate': 'list',
+            'source': ['Home Purchase', 'Foreclosure Prevention', 'Mortgage Default', 'Rental Counseling', 'Other']
+        })
 
 # Download button
 if service_rendered:
