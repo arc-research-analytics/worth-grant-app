@@ -87,9 +87,14 @@ columns_to_keep.update({
     "Gender": 10,
     "HH Income": 15,
     "HH Size": 15,
-    "Existing Homeowner (Y/N)": 22,
-    "First-Generation Homeowner (Y/N)": 28,
 })
+
+# Add homeowner fields based on template type
+if service_rendered == "Education":
+    columns_to_keep["1st Time Home Buyer (Y/N)"] = 22
+else:
+    columns_to_keep["Existing Homeowner (Y/N)"] = 22
+    columns_to_keep["First-Generation Homeowner (Y/N)"] = 28
 
 # auto-fill the first N rows
 rows_in_spreadsheet = 50
