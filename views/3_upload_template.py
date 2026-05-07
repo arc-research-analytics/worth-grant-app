@@ -152,7 +152,7 @@ def scrub_data(df, original_filename, service_type):
             ])
 
         if service_type == "New Units Produced":
-            keep_columns.append("has_sold")
+            keep_columns.append("Has Sold?")
 
         # Build send columns (excluding PII)
         send_columns = [
@@ -185,7 +185,7 @@ def scrub_data(df, original_filename, service_type):
             ])
 
         if service_type == "New Units Produced":
-            send_columns.append("has_sold")
+            send_columns.append("Has Sold?")
 
         # Rearrange columns
         keep_df = keep_df[keep_columns]
@@ -262,7 +262,7 @@ def main():
             columns.extend(default_ending_columns)
 
         if service_type == "New Units Produced":
-            columns.append("has_sold")
+            columns.append("Has Sold?")
 
         return columns
 
