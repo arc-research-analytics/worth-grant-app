@@ -96,6 +96,10 @@ else:
     columns_to_keep["Existing Homeowner (Y/N)"] = 22
     columns_to_keep["First-Generation Homeowner (Y/N)"] = 28
 
+# Add has_sold for New Units Produced only
+if service_rendered == "New Units Produced":
+    columns_to_keep["has_sold"] = 12
+
 # auto-fill the first N rows
 rows_in_spreadsheet = 50
 
@@ -125,6 +129,14 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
         worksheet.data_validation(1, counseling_service_col, rows_in_spreadsheet, counseling_service_col, {
             'validate': 'list',
             'source': ['Home Purchase', 'Foreclosure Prevention', 'Mortgage Default', 'Rental Counseling', 'Other']
+        })
+
+    # Add True/False dropdown validation for has_sold in New Units Produced template
+    if service_rendered == "New Units Produced":
+        has_sold_col = list(columns_to_keep.keys()).index("has_sold")
+        worksheet.data_validation(1, has_sold_col, rows_in_spreadsheet, has_sold_col, {
+            'validate': 'list',
+            'source': ['TRUE', 'FALSE']
         })
 
 # Download button

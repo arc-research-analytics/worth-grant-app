@@ -60,7 +60,7 @@ st.markdown(f'''
 
 
 # Function to scrub data
-def scrub_data(df, original_filename):
+def scrub_data(df, original_filename, service_type):
     # Initialize warnings list
     warnings = []
     
@@ -114,12 +114,19 @@ def scrub_data(df, original_filename):
         keep_df = df.copy()
         send_df = df.drop(columns=['Name', 'Date of Birth',
                         'Street Address', 'Unit (if applicable)'])
-    
-        # rearrage columns
-        keep_df = keep_df[[
+
+        # Build column order dynamically based on service type
+        keep_columns = [
             "Service",
             "Submitting Organization",
             "Service Completion Date",
+        ]
+
+        # Add service-specific column for Housing Counseling
+        if service_type == "Housing Counseling":
+            keep_columns.append("Counseling Service Rendered")
+
+        keep_columns.extend([
             "Unique ID",
             "Name",
             "Date of Birth",
@@ -133,13 +140,31 @@ def scrub_data(df, original_filename):
             "Gender",
             "HH Income",
             "HH Size",
-            "Existing Homeowner (Y/N)",
-            "First-Generation Homeowner (Y/N)"
-        ]]
-        send_df = send_df[[
+        ])
+
+        # Add ending columns based on template type
+        if service_type == "Education":
+            keep_columns.append("1st Time Home Buyer (Y/N)")
+        else:
+            keep_columns.extend([
+                "Existing Homeowner (Y/N)",
+                "First-Generation Homeowner (Y/N)"
+            ])
+
+        if service_type == "New Units Produced":
+            keep_columns.append("has_sold")
+
+        # Build send columns (excluding PII)
+        send_columns = [
             "Service",
             "Submitting Organization",
             "Service Completion Date",
+        ]
+
+        if service_type == "Housing Counseling":
+            send_columns.append("Counseling Service Rendered")
+
+        send_columns.extend([
             "Unique ID",
             "County",
             "ZIP",
@@ -149,9 +174,22 @@ def scrub_data(df, original_filename):
             "Gender",
             "HH Income",
             "HH Size",
-            "Existing Homeowner (Y/N)",
-            "First-Generation Homeowner (Y/N)"
-        ]]
+        ])
+
+        if service_type == "Education":
+            send_columns.append("1st Time Home Buyer (Y/N)")
+        else:
+            send_columns.extend([
+                "Existing Homeowner (Y/N)",
+                "First-Generation Homeowner (Y/N)"
+            ])
+
+        if service_type == "New Units Produced":
+            send_columns.append("has_sold")
+
+        # Rearrange columns
+        keep_df = keep_df[keep_columns]
+        send_df = send_df[send_columns]
     
         # Save both DataFrames to Excel files in memory buffers
         keep_buffer = io.BytesIO()
@@ -177,11 +215,15 @@ def scrub_data(df, original_filename):
 # Streamlit App
 def main():
 
-    # Expected column names
-    expected_columns = [
+    # Base columns shared by all templates
+    base_columns = [
         "Service",
         "Submitting Organization",
         "Service Completion Date",
+    ]
+
+    # Common columns after service-specific ones
+    common_columns = [
         "Name",
         "Date of Birth",
         "Street Address",
@@ -194,9 +236,35 @@ def main():
         "Gender",
         "HH Income",
         "HH Size",
+    ]
+
+    # Default ending columns for most templates
+    default_ending_columns = [
         "Existing Homeowner (Y/N)",
         "First-Generation Homeowner (Y/N)"
     ]
+
+    # Function to build expected columns based on service type
+    def get_expected_columns(service_type):
+        columns = base_columns.copy()
+
+        # Add service-specific column for Housing Counseling
+        if service_type == "Housing Counseling":
+            columns.append("Counseling Service Rendered")
+
+        # Add common columns
+        columns.extend(common_columns)
+
+        # Add ending columns based on template type
+        if service_type == "Education":
+            columns.append("1st Time Home Buyer (Y/N)")
+        else:
+            columns.extend(default_ending_columns)
+
+        if service_type == "New Units Produced":
+            columns.append("has_sold")
+
+        return columns
 
     # File upload widget
     uploaded_file = st.file_uploader(
@@ -216,6 +284,14 @@ def main():
             st.error(
                 "File format not supported! Please upload a CSV or Excel file.")
             st.stop()
+
+        # Detect service type from uploaded data
+        service_type = None
+        if "Service" in df.columns and len(df) > 0:
+            service_type = df["Service"].dropna().iloc[0] if not df["Service"].dropna().empty else None
+
+        # Get expected columns based on service type
+        expected_columns = get_expected_columns(service_type)
 
         # Validate column names
         uploaded_columns = list(df.columns)
@@ -242,7 +318,7 @@ def main():
         # Scrub data and package into ZIP
         def scrub_and_package():
             keep_buffer, keep_filename, send_buffer, send_filename, error_msg, warnings = scrub_data(
-                df, uploaded_file.name)
+                df, uploaded_file.name, service_type)
 
             # Display any warnings first
             for warning in warnings:
