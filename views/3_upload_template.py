@@ -54,7 +54,7 @@ st.markdown(f'''
 # instructional text
 st.markdown(f'''
     <p style="font-size: 23px; font-weight: 200; text-align: left;">
-        Once you have copied your data to the template downloaded from Page 2, upload it below. <i>Note that your uploaded data must contain all the fields originally included from the template you downloaded (and no new columns can be included)</i>. This app will anonymize your data and provide a unique ID field for each row of data.
+        Once you have copied your data to the template downloaded from Page 2, upload it below. <i>Note that your uploaded data must contain all the fields originally included from the template you downloaded</i>. This app will anonymize your data and provide a unique ID field for each row of data.
     </p>
 ''', unsafe_allow_html=True)
 
@@ -134,10 +134,13 @@ def scrub_data(df, original_filename, service_type):
             "Unit (if applicable)",
             "County",
             "ZIP",
-            "Race",
-            "Ethnicity",
-            "Primary Language",
-            "Gender",
+        ])
+
+        for col in ["Race", "Ethnicity", "Primary Language", "Gender"]:
+            if col in df.columns:
+                keep_columns.append(col)
+
+        keep_columns.extend([
             "HH Income",
             "HH Size",
         ])
@@ -168,10 +171,13 @@ def scrub_data(df, original_filename, service_type):
             "Unique ID",
             "County",
             "ZIP",
-            "Race",
-            "Ethnicity",
-            "Primary Language",
-            "Gender",
+        ])
+
+        for col in ["Race", "Ethnicity", "Primary Language", "Gender"]:
+            if col in df.columns:
+                send_columns.append(col)
+
+        send_columns.extend([
             "HH Income",
             "HH Size",
         ])
@@ -186,6 +192,11 @@ def scrub_data(df, original_filename, service_type):
 
         if service_type == "New Units Produced":
             send_columns.append("Has Sold?")
+
+        # Append any extra columns (not in the standard template) at the end of both outputs
+        extra_cols = [col for col in df.columns if col not in keep_columns]
+        keep_columns.extend(extra_cols)
+        send_columns.extend(extra_cols)
 
         # Rearrange columns
         keep_df = keep_df[keep_columns]
@@ -230,10 +241,6 @@ def main():
         "Unit (if applicable)",
         "County",
         "ZIP",
-        "Race",
-        "Ethnicity",
-        "Primary Language",
-        "Gender",
         "HH Income",
         "HH Size",
     ]
@@ -300,15 +307,12 @@ def main():
         extra_columns = [
             col for col in uploaded_columns if col not in expected_columns]
 
-        if missing_columns or extra_columns:
-            if missing_columns:
-                st.error(
-                    f"Uploaded file missing the following column(s): {', '.join(missing_columns)}. Please modify your source data and upload again!"
-                )
-            if extra_columns:
-                st.error(
-                    f"Uploaded file contains the following extra column(s): {', '.join(extra_columns)}")
+        if missing_columns:
+            st.error(
+                f"Uploaded file missing the following column(s): {', '.join(missing_columns)}. Please modify your source data and upload again!"
+            )
             st.stop()
+
 
         # Button to scrub and download data
         tz = timezone("America/New_York")
