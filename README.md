@@ -72,6 +72,17 @@ streamlit run main.py
 
 The app is deployed on Streamlit Community Cloud.
 
+## Pushing Changes
+
+Before pushing, always run:
+
+```bash
+git pull --rebase origin main
+git push
+```
+
+The `caffeine.yml` workflow commits to `Assets/timestamp.txt` up to six times a day to keep the Streamlit instance awake. If you push without pulling first, git will reject the push because the remote has commits you don't have locally. The rebase pulls in those automated commits cleanly and places yours on top.
+
 ## Important Constraint
 
 The column schemas defined in the template generator (`views/2_download_template.py`) and the column validator in the upload page (`views/3_upload_template.py`) must stay in sync. If a column is added, removed, or renamed in one, it must be updated in both.
