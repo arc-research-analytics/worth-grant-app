@@ -86,3 +86,7 @@ The `caffeine.yml` workflow commits to `Assets/timestamp.txt` up to six times a 
 ## Important Constraint
 
 The column schemas defined in the template generator (`views/2_download_template.py`) and the column validator in the upload page (`views/3_upload_template.py`) must stay in sync. If a column is added, removed, or renamed in one, it must be updated in both.
+
+### November 2026 Updates
+
+* Intent to change names and email addresses of contacts on Introduction page
