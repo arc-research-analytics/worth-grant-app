@@ -53,7 +53,7 @@ service_rendered = st.selectbox(
         "Down Payment Assistance",
         "Home Rehabilitation",
         "Legacy Resident Tax Relief",
-        "Heirs Property Resolution",
+        "Heirs Property Prevention or Remediation",
         "Education",
         "CDFI Activity",
     ],
@@ -73,6 +73,9 @@ columns_to_keep = {
 if service_rendered == "Housing Counseling":
     columns_to_keep["Counseling Service Rendered"] = 25
 
+if service_rendered == "Heirs Property Prevention or Remediation":
+    columns_to_keep["Type of Service"] = 25
+
 # Continue with remaining columns
 columns_to_keep.update({
     "Name": 20,
@@ -89,9 +92,14 @@ columns_to_keep.update({
     "HH Size": 15,
 })
 
-# Add homeowner fields based on template type
+# Add homeowner and other fields based on template type
 if service_rendered == "Education":
     columns_to_keep["1st Time Home Buyer (Y/N)"] = 22
+elif service_rendered == "Home Rehabilitation":
+    columns_to_keep["First-Generation Homeowner (Y/N)"] = 28
+elif service_rendered == "Heirs Property Prevention or Remediation":
+    columns_to_keep["First-Generation Homeowner (Y/N)"] = 28
+    columns_to_keep["Stage of Remediation (For Title Remediation)"] = 28
 else:
     columns_to_keep["Existing Homeowner (Y/N)"] = 22
     columns_to_keep["First-Generation Homeowner (Y/N)"] = 28
@@ -129,6 +137,14 @@ with pd.ExcelWriter(buffer, engine='xlsxwriter') as writer:
         worksheet.data_validation(1, counseling_service_col, rows_in_spreadsheet, counseling_service_col, {
             'validate': 'list',
             'source': ['Home Purchase', 'Foreclosure Prevention', 'Mortgage Default', 'Rental Counseling', 'Other']
+        })
+
+    # Add data validation for Type of Service column in Heirs Property Prevention or Remediation template
+    if service_rendered == "Heirs Property Prevention or Remediation":
+        heirs_property_service_col = list(columns_to_keep.keys()).index("Type of Service")
+        worksheet.data_validation(1, heirs_property_service_col, rows_in_spreadsheet, heirs_property_service_col, {
+            'validate': 'list',
+            'source': ['Prevention - Estate Planning', 'Prevention - Education', 'Title Remediation']
         })
 
     # Add True/False dropdown validation for has_sold in New Units Produced template

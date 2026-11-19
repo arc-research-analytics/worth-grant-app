@@ -126,6 +126,9 @@ def scrub_data(df, original_filename, service_type):
         if service_type == "Housing Counseling":
             keep_columns.append("Counseling Service Rendered")
 
+        if service_type == "Heirs Property Prevention or Remediation":
+            keep_columns.append("Type of Service")
+
         keep_columns.extend([
             "Unique ID",
             "Name",
@@ -148,6 +151,11 @@ def scrub_data(df, original_filename, service_type):
         # Add ending columns based on template type
         if service_type == "Education":
             keep_columns.append("1st Time Home Buyer (Y/N)")
+        elif service_type == "Home Rehabilitation":
+            keep_columns.append("First-Generation Homeowner (Y/N)")
+        elif service_type == "Heirs Property Prevention or Remediation":
+            keep_columns.append("First-Generation Homeowner (Y/N)")
+            keep_columns.append("Stage of Remediation (For Title Remediation)")
         else:
             keep_columns.extend([
                 "Existing Homeowner (Y/N)",
@@ -167,6 +175,9 @@ def scrub_data(df, original_filename, service_type):
         if service_type == "Housing Counseling":
             send_columns.append("Counseling Service Rendered")
 
+        if service_type == "Heirs Property Prevention or Remediation":
+            send_columns.append("Type of Service")
+
         send_columns.extend([
             "Unique ID",
             "County",
@@ -184,6 +195,11 @@ def scrub_data(df, original_filename, service_type):
 
         if service_type == "Education":
             send_columns.append("1st Time Home Buyer (Y/N)")
+        elif service_type == "Home Rehabilitation":
+            send_columns.append("First-Generation Homeowner (Y/N)")
+        elif service_type == "Heirs Property Prevention or Remediation":
+            send_columns.append("First-Generation Homeowner (Y/N)")
+            send_columns.append("Stage of Remediation (For Title Remediation)")
         else:
             send_columns.extend([
                 "Existing Homeowner (Y/N)",
@@ -259,12 +275,20 @@ def main():
         if service_type == "Housing Counseling":
             columns.append("Counseling Service Rendered")
 
+        if service_type == "Heirs Property Prevention or Remediation":
+            columns.append("Type of Service")
+
         # Add common columns
         columns.extend(common_columns)
 
         # Add ending columns based on template type
         if service_type == "Education":
             columns.append("1st Time Home Buyer (Y/N)")
+        elif service_type == "Home Rehabilitation":
+            columns.append("First-Generation Homeowner (Y/N)")
+        elif service_type == "Heirs Property Prevention or Remediation":
+            columns.append("First-Generation Homeowner (Y/N)")
+            columns.append("Stage of Remediation (For Title Remediation)")
         else:
             columns.extend(default_ending_columns)
 

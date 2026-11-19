@@ -89,4 +89,7 @@ The column schemas defined in the template generator (`views/2_download_template
 
 ### November 2026 Updates
 
-* Intent to change names and email addresses of contacts on Introduction page
+* Changed names and email addresses of contacts on Introduction page
+* Changed "Heirs Property Resolution" service name to "Heirs Property Prevention or Remediation" per CFGA
+* Added Type of Service (with dropdown) and Stage of Remediation fields to Heirs Property template per CFGA
+* Removed "Existing Homeowner" column from Home Rehabilitation and Heirs Property templates
